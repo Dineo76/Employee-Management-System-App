@@ -93,6 +93,7 @@ async function main() {
     })
   ]);
 
+  
   console.log('Seed data created successfully!');
   console.log('Admin user created with email: thembeka@admin.com and password: admin123');
 }
