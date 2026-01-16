@@ -194,6 +194,56 @@ router.put('/:id', [auth, admin], async (req, res) => {
   }
 });
 
+// Employee updates own details (NOT department or employee number)
+router.put('/me/update', auth, async (req, res) => {
+  try {
+    const { firstName, lastName, email } = req.body;
+
+    // Use email from logged-in user
+    const employeeEmail = req.user.email;
+
+    // Find employee by email (NOT id)
+    const existingEmployee = await prisma.employee.findUnique({
+      where: { email: employeeEmail }
+    });
+
+    if (!existingEmployee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    // Check if email is being changed and already exists
+    if (email && email !== existingEmployee.email) {
+      const emailExists = await prisma.employee.findUnique({
+        where: { email }
+      });
+
+      if (emailExists) {
+        return res.status(400).json({ message: 'Email already in use' });
+      }
+    }
+
+    const updatedEmployee = await prisma.employee.update({
+      where: { email: employeeEmail },
+      data: {
+        ...(firstName && { firstName }),
+        ...(lastName && { lastName }),
+        ...(email && { email }),
+       
+      },
+      include: {
+        department: true
+      }
+    });
+
+    res.json(updatedEmployee);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+
 // Delete employee (Admin only)
 router.delete('/:id', [auth, admin], async (req, res) => {
   try {

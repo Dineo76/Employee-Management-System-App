@@ -19,6 +19,59 @@ async function main() {
     },
   });
 
+  // Create employee user accounts
+const employeePassword = await bcrypt.hash('password123', 10);
+
+const employeeUsers = await Promise.all([
+  prisma.user.upsert({
+    where: { email: 'sbongile@user.com' },
+    update: {},
+    create: {
+      email: 'sbongile@user.com',
+      name: 'Sbongile Rathokwane',
+      password: employeePassword,
+      role: 'USER',
+    },
+  }),
+
+  prisma.user.upsert({
+    where: { email: 'simamkele@user.com' },
+    update: {},
+    create: {
+      email: 'simamkele@user.com',
+      name: 'Simamkele Mampondo',
+      password: employeePassword,
+      role: 'USER',
+    },
+  }),
+
+  prisma.user.upsert({
+    where: { email: 'dineo@user.com' },
+    update: {},
+    create: {
+      email: 'dineo@user.com',
+      name: 'Dineo Makofane',
+      password: employeePassword,
+      role: 'USER',
+    },
+  }),
+
+  prisma.user.upsert({
+    where: { email: 'xolelwa@user.com' },
+    update: {},
+    create: {
+      email: 'xolelwa@user.com',
+      name: 'Xolelwa Cekiso',
+      password: employeePassword,
+      role: 'USER',
+    },
+  }),
+]);
+
+
+
+
+
   // Create departments
   const departments = await Promise.all([
     prisma.department.upsert({

@@ -6,10 +6,11 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-// Register a new user
+//REGISTER USER
+ 
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, name ,  role} = req.body;
+    const { email, password, name, role } = req.body;
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -34,9 +35,13 @@ router.post('/register', async (req, res) => {
       }
     });
 
-    // Generate JWT
+    // Generate JWT (INCLUDES EMAIL)
     const token = jwt.sign(
-      { userId: user.id, role: user.role },
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role
+      },
       process.env.JWT_SECRET,
       { expiresIn: process.env.EXPIRES_IN }
     );
@@ -48,7 +53,8 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Login user
+//LOGIN USER
+ 
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -68,12 +74,14 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Generate JWT
+    // Generate JWT (INCLUDES EMAIL)
     const token = jwt.sign(
-      { userId: user.id,  //Who is this user by ID
-        role: user.role // ACL what is the role of this user
-       },
-      process.env.JWT_SECRET,  //Handshake 
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role
+      },
+      process.env.JWT_SECRET,
       { expiresIn: process.env.EXPIRES_IN }
     );
 

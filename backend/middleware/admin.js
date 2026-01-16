@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 module.exports = async (req, res, next) => {
   try {
-
+  
     const user = await prisma.user.findUnique({
       where: { id: req.user.userId }
     });
@@ -18,3 +18,6 @@ module.exports = async (req, res, next) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+
+
