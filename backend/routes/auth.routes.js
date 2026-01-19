@@ -52,29 +52,23 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
-//LOGIN USER
  
+// LOGIN USER
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check if user exists
-    const user = await prisma.user.findUnique({
-      where: { email }
-    });
-
+    const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Generate JWT (INCLUDES EMAIL)
+    // Generate JWT
     const token = jwt.sign(
       {
         id: user.id,
@@ -85,11 +79,19 @@ router.post('/login', async (req, res) => {
       { expiresIn: process.env.EXPIRES_IN }
     );
 
-    res.json({ token });
+    // Include user info in the response
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role
+      }
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
 });
-
 module.exports = router;

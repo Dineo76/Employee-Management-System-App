@@ -1,0 +1,17 @@
+import { configureStore } from '@reduxjs/toolkit';
+import authReducer from './slices/authSlice';
+import employeeReducer from './slices/employeeSlice';
+
+const store = configureStore({
+  reducer: {
+    auth: authReducer,
+    employees: employeeReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
+
+export default store; //this is like a storage box
+
