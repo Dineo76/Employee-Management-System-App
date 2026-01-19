@@ -3,9 +3,9 @@ const prisma = new PrismaClient();
 
 module.exports = async (req, res, next) => {
   try {
-  
+
     const user = await prisma.user.findUnique({
-      where: { id: req.user.userId }
+      where: { id: req.user.id }
     });
 
     if (!user || user.role !== 'ADMIN') {

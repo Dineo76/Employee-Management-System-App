@@ -13,11 +13,11 @@ router.get('/', auth, async (req, res) => {
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
     const where = {};
-    
+
     if (department) {
       where.departmentId = parseInt(department);
     }
-    
+
     if (search) {
       where.OR = [
         { firstName: { contains: search, mode: 'insensitive' } },
@@ -59,7 +59,7 @@ router.get('/:id', auth, async (req, res) => {
       where: { id: parseInt(req.params.id) },
       include: {
         department: true,
-      
+
       }
     });
 
@@ -169,7 +169,7 @@ router.put('/:id', [auth, admin], async (req, res) => {
       }
     }
 
-   
+
 
     const updatedEmployee = await prisma.employee.update({
       where: { id: parseInt(req.params.id) },
@@ -180,7 +180,7 @@ router.put('/:id', [auth, admin], async (req, res) => {
         ...(employeeNo && { employeeNo }),
         ...(position && { position }),
         ...(departmentId && { department: { connect: { id: departmentId } } }),
-        
+
       },
       include: {
         department: true,
@@ -228,7 +228,7 @@ router.put('/me/update', auth, async (req, res) => {
         ...(firstName && { firstName }),
         ...(lastName && { lastName }),
         ...(email && { email }),
-       
+
       },
       include: {
         department: true
@@ -256,7 +256,7 @@ router.delete('/:id', [auth, admin], async (req, res) => {
       return res.status(404).json({ message: 'Employee not found' });
     }
 
-    
+
 
     await prisma.employee.delete({
       where: { id: parseInt(req.params.id) }
