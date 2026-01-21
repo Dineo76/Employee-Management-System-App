@@ -168,26 +168,6 @@ export default function Login() {
           </button>
         </div>
 
-        <div className="text-center">
-          <Link
-            to="/forgot-password"
-            className="text-decoration-none d-block mb-2"
-            style={{ color: "#4CAF50", fontSize: "0.9rem" }}
-          >
-            Forgot your password?
-          </Link>
-
-          <div style={{ fontSize: "0.9rem" }}>
-            <span className="text-muted">Don't have an account? </span>
-            <Link
-              to="/register"
-              className="text-decoration-none"
-              style={{ color: "#4CAF50" }}
-            >
-              Sign up
-            </Link>
-          </div>
-        </div>
       </form>
     </div>
   );
